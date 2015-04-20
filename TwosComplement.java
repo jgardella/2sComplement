@@ -49,7 +49,42 @@ public class TwosComplement
         return sum;
         
     }
-	
+
+    private static long popSum(int n)
+    {
+        long tot = 0;
+
+        if (n == -1)
+            return 31;
+        if (n >= 0) {
+            if (n == 0) {
+                return 0;
+            } else if (n % 2 == 0) {
+                return countPositive(n) + popSum(n - 1);
+            }
+            return ((n + 1) / 2) + 2*popSum(n / 2);
+        } else {
+            tot = -32 * n;
+            n = (n + 1) * -1;
+            return tot - popSum(n);
+        }
+    }
+
+    private static long popSumRange(int a, int b)
+    {
+        int min = (a < b) ? a : b;
+        int max = (a < b) ? b : a;
+        long sum = 0;
+
+        if (min <= 0 && max <= 0)
+            sum = popSum(min - 1) - popSum(max);
+        else if (min <= 0 && max > 0)
+            sum = popSum(min) + popSum(max);
+        else if (min > 0 && max > 0)
+            sum = popSum(max) - popSum(min - 1);
+
+        return sum;
+    }
 
 	public static void main(String[] args) 
 	{
@@ -60,6 +95,7 @@ public class TwosComplement
 		{
 			numOne = scan.nextInt();
 			numTwo = scan.nextInt();
+            System.out.println(popSumRange(numOne, numTwo));
 			System.out.println(numTwosComplementOnesRange(numOne, numTwo));
 		}
 		scan.close();
