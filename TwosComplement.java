@@ -1,6 +1,3 @@
-package hackerrank;
-
-import java.util.Hashtable;
 import java.util.Scanner;
 
 public class TwosComplement 
@@ -13,15 +10,13 @@ public class TwosComplement
 	 * @param end End of range (inclusive)
 	 * @return Returns the  number of 1's needed to write all numbers in the given range.
 	 */
-	public static int numTwosComplementOnesRange(int start, int end)
+	public static long numTwosComplementOnesRange(int start, int end)
 	{
-		Hashtable<Integer, Integer> memoizationTable = new Hashtable<Integer, Integer>();
-		int totalOnes = 0;
-		int numOnes;
+		long totalOnes = 0L;
+		long numOnes;
 		for(int i = start; i <= end; i++)
 		{
-			numOnes = numTwosComplementOnes(i, memoizationTable);
-			memoizationTable.put(i, numOnes);
+			numOnes = numTwosComplementOnes(i);
 			totalOnes += numOnes;
 		}
 		return totalOnes;
@@ -32,21 +27,28 @@ public class TwosComplement
 	 * @param num Number to calculate number of 1's for
 	 * @return Returns the number of 1's required to write the given number
 	 */
-	private static int numTwosComplementOnes(int num, Hashtable<Integer, Integer> memoizationTable)
+	private static long numTwosComplementOnes(int num)
 	{
-		int numOnes = 0;
-		while(num != 0)
-		{
-			if(memoizationTable.containsKey(num))
-				return numOnes + memoizationTable.get(num);
-			if(memoizationTable.containsKey(-num - 1))
-				return  numOnes + (32 - memoizationTable.get(-num - 1));
-			if((num & 1) == 1)
-				numOnes++;
-			num >>>= 1;
-		}
-		return numOnes;
+		if (num >= 0) {
+            return countPositive(num);
+        } else if (num == -1) {
+            return 32;
+        }
+        //if ((num & 1) == 1)//odd
+            return 32 - countPositive((num * -1) - 1);
+        //return 32 - countPositive((num * -1));
 	}
+    
+    private static long countPositive(int num) {
+        long sum = 0L;
+        while (num != 0) {
+            if ((num & 1) == 1)
+                sum++;
+            num = num >>> 1;
+        }
+        return sum;
+        
+    }
 	
 
 	public static void main(String[] args) 
