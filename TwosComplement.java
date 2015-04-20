@@ -76,9 +76,13 @@ public class TwosComplement
         int max = (a < b) ? b : a;
         long sum = 0;
 
-        if (min <= 0 && max <= 0)
+        if (min == 0)
+            sum = popSum(max);
+        if (max == 0)
+            sum = popSum(min);
+        if (min < 0 && max < 0)
             sum = popSum(min - 1) - popSum(max);
-        else if (min <= 0 && max > 0)
+        else if (min < 0 && max > 0)
             sum = popSum(min) + popSum(max);
         else if (min > 0 && max > 0)
             sum = popSum(max) - popSum(min - 1);
@@ -96,7 +100,8 @@ public class TwosComplement
 			numOne = scan.nextInt();
 			numTwo = scan.nextInt();
             System.out.println(popSumRange(numOne, numTwo));
-			System.out.println(numTwosComplementOnesRange(numOne, numTwo));
+            if (args.length > 0)
+                System.out.println(numTwosComplementOnesRange(numOne, numTwo));
 		}
 		scan.close();
 	}
