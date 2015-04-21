@@ -54,40 +54,36 @@ public class TwosComplement
     {
         long tot = 0;
 
-        if (n == -1)
-            return 31;
-        if (n >= 0) {
-            if (n == 0) {
-                return 0;
-            } else if (n % 2 == 0) {
-                return countPositive(n) + popSum(n - 1);
-            }
-            return ((n + 1) / 2) + 2*popSum(n / 2);
-        } else {
-            tot = -32 * n;
-            n = (n + 1) * -1;
-            return tot - popSum(n);
+        if (n == 0) {
+            return 0;
+        } else if (n % 2 == 0) {
+            return countPositive(n) + popSum(n - 1);
         }
+        return ((n + 1) / 2) + 2*popSum(n / 2);
     }
 
     private static long popSumRange(int a, int b)
     {
         int min = (a < b) ? a : b;
         int max = (a < b) ? b : a;
-        long sum = 0;
+        long r1 = 0, r2 = 0;
 
-        if (min == 0)
-            sum = popSum(max);
-        if (max == 0)
-            sum = popSum(min);
+        if (min < 0)
+            r1 = (-32 * min) - popSum(~min);
+        else
+            r1 = popSum(min);
+
+        if (max < 0)
+            r2 = (-32 * max) - popSum(~max);
+        else
+            r2 = popSum(max);
+
         if (min < 0 && max < 0)
-            sum = popSum(min - 1) - popSum(max);
-        else if (min < 0 && max > 0)
-            sum = popSum(min) + popSum(max);
-        else if (min > 0 && max > 0)
-            sum = popSum(max) - popSum(min - 1);
-
-        return sum;
+            return r1 - r2 + countPositive(max);
+        else if (min < 0 && max >= 0)
+            return r1 + r2;
+        else
+            return r2 - r1 + countPositive(min);
     }
 
 	public static void main(String[] args) 
